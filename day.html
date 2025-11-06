@@ -1,0 +1,1412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day Tour - Login & Registration</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            box-sizing: border-box;
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .slide-in {
+            animation: slideIn 0.3s ease-out;
+        }
+        @keyframes slideIn {
+            from { transform: translateX(-100%); }
+            to { transform: translateX(0); }
+        }
+        .activity-card {
+            transition: all 0.3s ease;
+        }
+        .activity-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        .time-progress {
+            background: linear-gradient(90deg, #3B82F6 0%, #8B5CF6 100%);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-purple-50 min-h-full">
+    
+    <!-- Login/Registration Interface -->
+    <div id="authContainer" class="min-h-full flex items-center justify-center px-4 py-8">
+        <div class="max-w-md w-full">
+            <!-- Welcome Screen -->
+            <div id="welcomeScreen" class="bg-white rounded-2xl shadow-2xl p-8 text-center fade-in">
+                <div class="text-6xl mb-6">🌅</div>
+                <h1 class="text-3xl font-bold text-gray-800 mb-4">Welcome to Day Tour</h1>
+                <p class="text-gray-600 mb-8">Your personal 24-hour activity tracker to help you make the most of every day!</p>
+                
+                <div class="space-y-4">
+                    <button onclick="showRegistrationForm()" class="w-full bg-purple-600 text-white py-3 px-6 rounded-lg hover:bg-purple-700 transition-colors font-medium">
+                        Get Started - Create Account
+                    </button>
+                    
+                    <div class="text-center text-gray-500">or</div>
+                    
+                    <button onclick="showLoginForm()" class="w-full bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors font-medium">
+                        I Have an Account - Sign In
+                    </button>
+                </div>
+            </div>
+
+            <!-- Login Form -->
+            <div id="loginForm" class="bg-white rounded-2xl shadow-2xl p-8 fade-in" style="display: none;">
+                <div class="text-center mb-6">
+                    <div class="text-4xl mb-4">🔐</div>
+                    <h2 class="text-2xl font-bold text-gray-800">Welcome Back!</h2>
+                    <p class="text-gray-600">Sign in to continue your journey</p>
+                </div>
+                
+                <form onsubmit="handleLogin(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-gray-700 font-medium mb-2">Email Address</label>
+                        <input type="email" id="loginEmail" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter your email">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-gray-700 font-medium mb-2">Mobile Number</label>
+                        <input type="tel" id="loginMobile" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter your mobile number">
+                    </div>
+                    
+                    <button type="submit" class="w-full bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors font-medium">
+                        Sign In
+                    </button>
+                </form>
+                
+                <div class="mt-6 text-center">
+                    <button onclick="showWelcomeScreen()" class="text-gray-600 hover:text-gray-800">
+                        ← Back to welcome
+                    </button>
+                </div>
+            </div>
+
+            <!-- Registration Form -->
+            <div id="registrationForm" class="bg-white rounded-2xl shadow-2xl p-8 fade-in" style="display: none;">
+                <div class="text-center mb-6">
+                    <div class="text-4xl mb-4">📝</div>
+                    <h2 class="text-2xl font-bold text-gray-800">Create Account</h2>
+                    <p class="text-gray-600">Fill in your details to get started</p>
+                </div>
+                
+                <form onsubmit="handleRegistration(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-gray-700 font-medium mb-2">Email Address *</label>
+                        <input type="email" id="regEmail" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="Enter your email address">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-gray-700 font-medium mb-2">Mobile Number *</label>
+                        <input type="tel" id="regMobile" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="Enter your mobile number">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-gray-700 font-medium mb-2">Full Name *</label>
+                        <input type="text" id="regName" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="Enter your full name">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-gray-700 font-medium mb-2">Age *</label>
+                        <input type="number" id="regAge" required min="13" max="120" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="Enter your age">
+                    </div>
+                    
+                    <button type="submit" class="w-full bg-green-600 text-white py-3 px-6 rounded-lg hover:bg-green-700 transition-colors font-medium">
+                        Create Account ✨
+                    </button>
+                </form>
+                
+                <div class="mt-6 text-center">
+                    <button onclick="showWelcomeScreen()" class="text-gray-600 hover:text-gray-800">
+                        ← Back to welcome
+                    </button>
+                </div>
+            </div>
+
+            <!-- Success Message -->
+            <div id="successMessage" class="bg-white rounded-2xl shadow-2xl p-8 text-center fade-in" style="display: none;">
+                <div class="text-6xl mb-6">🎉</div>
+                <h2 class="text-2xl font-bold text-green-600 mb-4">Account Created Successfully!</h2>
+                <p class="text-gray-600 mb-6">Welcome to Day Tour! You can now start tracking your daily activities.</p>
+                <button onclick="enterApp()" class="bg-blue-600 text-white py-3 px-8 rounded-lg hover:bg-blue-700 transition-colors font-medium">
+                    Enter Day Tour →
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Profile Modal -->
+    <div id="editProfileModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" style="display: none;">
+        <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full mx-4">
+            <div class="text-center mb-6">
+                <div class="text-4xl mb-4">👤</div>
+                <h2 class="text-2xl font-bold text-gray-800">Edit Profile</h2>
+                <p class="text-gray-600">Update your personal information</p>
+            </div>
+            
+            <form onsubmit="handleProfileUpdate(event)" class="space-y-4">
+                <div>
+                    <label class="block text-gray-700 font-medium mb-2">Full Name *</label>
+                    <input type="text" id="editName" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter your full name">
+                </div>
+                
+                <div>
+                    <label class="block text-gray-700 font-medium mb-2">Age *</label>
+                    <input type="number" id="editAge" required min="13" max="120" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter your age">
+                </div>
+                
+                <div>
+                    <label class="block text-gray-700 font-medium mb-2">Email Address *</label>
+                    <input type="email" id="editEmail" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter your email address">
+                </div>
+                
+                <div>
+                    <label class="block text-gray-700 font-medium mb-2">Mobile Number *</label>
+                    <input type="tel" id="editMobile" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter your mobile number">
+                </div>
+                
+                <div class="flex gap-3 pt-4">
+                    <button type="submit" class="flex-1 bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors font-medium">
+                        Save Changes
+                    </button>
+                    <button type="button" onclick="hideEditProfile()" class="flex-1 bg-gray-300 text-gray-700 py-3 px-6 rounded-lg hover:bg-gray-400 transition-colors font-medium">
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main App (Hidden initially) -->
+    <div id="mainApp" style="display: none;">
+        <div class="container mx-auto px-4 py-8 max-w-4xl">
+            <!-- User Info Bar -->
+            <div class="bg-white rounded-xl shadow-lg p-4 mb-6 flex justify-between items-center">
+                <div class="flex items-center gap-4">
+                    <div class="text-2xl">👋</div>
+                    <div>
+                        <div class="font-semibold text-gray-800">Welcome, <span id="userName"></span>!</div>
+                        <div class="text-sm text-gray-600">Age: <span id="userAge"></span> | <span id="userEmail"></span></div>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button onclick="showEditProfile()" class="text-blue-600 hover:text-blue-800 font-medium flex items-center gap-1">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                        </svg>
+                        Edit Profile
+                    </button>
+                    <button onclick="logout()" class="text-red-600 hover:text-red-800 font-medium">
+                        Logout
+                    </button>
+                </div>
+            </div>
+
+            <!-- Header -->
+            <div class="text-center mb-8">
+                <h1 class="text-4xl font-bold text-gray-800 mb-2">🌅 Day Tour</h1>
+                <div class="bg-white rounded-xl shadow-lg p-4 mb-4 inline-block">
+                    <div id="currentTime" class="text-3xl font-mono font-bold text-blue-600 mb-1"></div>
+                    <div id="currentDate" class="text-sm text-gray-600"></div>
+                </div>
+            </div>
+
+            <!-- Summary Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="bg-white rounded-xl shadow-lg p-6 text-center">
+                    <div class="text-3xl font-bold text-blue-600" id="totalActivities">0</div>
+                    <div class="text-gray-600">Total Activities</div>
+                </div>
+                <div class="bg-white rounded-xl shadow-lg p-6 text-center">
+                    <div class="text-3xl font-bold text-purple-600" id="totalHours">0.0</div>
+                    <div class="text-gray-600">Total Hours</div>
+                </div>
+                <div class="bg-white rounded-xl shadow-lg p-6 text-center">
+                    <div class="text-3xl font-bold text-green-600" id="remainingHours">24.0</div>
+                    <div class="text-gray-600">Hours Remaining</div>
+                </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Day Progress</h3>
+                <div class="w-full bg-gray-200 rounded-full h-4">
+                    <div class="time-progress h-4 rounded-full transition-all duration-500" id="progressBar" style="width: 0%"></div>
+                </div>
+                <div class="flex justify-between text-sm text-gray-600 mt-2">
+                    <span>0 hours</span>
+                    <span id="progressText">0% complete</span>
+                    <span>24 hours</span>
+                </div>
+            </div>
+
+            <!-- Category Sections -->
+            <div class="space-y-6 mb-8">
+                <!-- Work Category -->
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <span class="text-2xl">💼</span>
+                            <h3 class="text-xl font-semibold text-gray-800">Work</h3>
+                        </div>
+                        <div class="flex gap-2">
+                            <input type="number" id="workHours" class="w-20 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="0" min="0" max="23">
+                            <span class="flex items-center text-gray-600">hr</span>
+                            <input type="number" id="workMinutes" class="w-20 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="0" min="0" max="59">
+                            <span class="flex items-center text-gray-600">min</span>
+                            <button onclick="saveActivity('work')" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors">Log</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Exercise Category -->
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <span class="text-2xl">🏃</span>
+                            <h3 class="text-xl font-semibold text-gray-800">Exercise</h3>
+                        </div>
+                        <div class="flex gap-2">
+                            <input type="number" id="exerciseHours" class="w-20 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent" placeholder="0" min="0" max="23">
+                            <span class="flex items-center text-gray-600">hr</span>
+                            <input type="number" id="exerciseMinutes" class="w-20 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent" placeholder="0" min="0" max="59">
+                            <span class="flex items-center text-gray-600">min</span>
+                            <button onclick="saveActivity('exercise')" class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors">Log</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Meals Category -->
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <span class="text-2xl">🍽️</span>
+                            <h3 class="text-xl font-semibold text-gray-800">Meals</h3>
+                        </div>
+                        <div class="flex gap-2">
+                            <input type="number" id="mealsHours" class="w-20 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent" placeholder="0" min="0" max="23">
+                            <span class="flex items-center text-gray-600">hr</span>
+                            <input type="number" id="mealsMinutes" class="w-20 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent" placeholder="0" min="0" max="59">
+                            <span class="flex items-center text-gray-600">min</span>
+                            <button onclick="saveActivity('meals')" class="bg-orange-600 text-white px-6 py-2 rounded-lg hover:bg-orange-700 transition-colors">Log</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sleep Category -->
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <span class="text-2xl">😴</span>
+                            <h3 class="text-xl font-semibold text-gray-800">Sleep</h3>
+                        </div>
+                        <div class="flex gap-2">
+                            <input type="number" id="sleepHours" class="w-20 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="0" min="0" max="23">
+                            <span class="flex items-center text-gray-600">hr</span>
+                            <input type="number" id="sleepMinutes" class="w-20 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="0" min="0" max="59">
+                            <span class="flex items-center text-gray-600">min</span>
+                            <button onclick="saveActivity('sleep')" class="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition-colors">Log</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Social Media Category -->
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <span class="text-2xl">📱</span>
+                            <h3 class="text-xl font-semibold text-gray-800">Social Media</h3>
+                        </div>
+                        <div class="flex gap-2">
+                            <input type="number" id="socialmediaHours" class="w-20 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent" placeholder="0" min="0" max="23">
+                            <span class="flex items-center text-gray-600">hr</span>
+                            <input type="number" id="socialmediaMinutes" class="w-20 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent" placeholder="0" min="0" max="59">
+                            <span class="flex items-center text-gray-600">min</span>
+                            <button onclick="saveActivity('socialmedia')" class="bg-pink-600 text-white px-6 py-2 rounded-lg hover:bg-pink-700 transition-colors">Log</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Travel Category -->
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <span class="text-2xl">🚗</span>
+                            <h3 class="text-xl font-semibold text-gray-800">Travel</h3>
+                        </div>
+                        <div class="flex gap-2">
+                            <input type="number" id="travelHours" class="w-20 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent" placeholder="0" min="0" max="23">
+                            <span class="flex items-center text-gray-600">hr</span>
+                            <input type="number" id="travelMinutes" class="w-20 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent" placeholder="0" min="0" max="59">
+                            <span class="flex items-center text-gray-600">min</span>
+                            <button onclick="saveActivity('travel')" class="bg-yellow-600 text-white px-6 py-2 rounded-lg hover:bg-yellow-700 transition-colors">Log</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Study Category -->
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <span class="text-2xl">📚</span>
+                            <h3 class="text-xl font-semibold text-gray-800">Study</h3>
+                        </div>
+                        <div class="flex gap-2">
+                            <input type="number" id="studyHours" class="w-20 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent" placeholder="0" min="0" max="23">
+                            <span class="flex items-center text-gray-600">hr</span>
+                            <input type="number" id="studyMinutes" class="w-20 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent" placeholder="0" min="0" max="59">
+                            <span class="flex items-center text-gray-600">min</span>
+                            <button onclick="saveActivity('study')" class="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 transition-colors">Log</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Other Category -->
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <span class="text-2xl">📝</span>
+                            <h3 class="text-xl font-semibold text-gray-800">Other</h3>
+                        </div>
+                        <div class="flex gap-2">
+                            <input type="number" id="otherHours" class="w-20 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent" placeholder="0" min="0" max="23">
+                            <span class="flex items-center text-gray-600">hr</span>
+                            <input type="number" id="otherMinutes" class="w-20 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent" placeholder="0" min="0" max="59">
+                            <span class="flex items-center text-gray-600">min</span>
+                            <button onclick="saveActivity('other')" class="bg-gray-600 text-white px-6 py-2 rounded-lg hover:bg-gray-700 transition-colors">Log</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reminder Section -->
+            <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-xl font-semibold text-gray-800">🔔 Set Reminder</h3>
+                    <div id="reminderStatus" class="text-sm text-gray-500">No reminder set</div>
+                </div>
+                
+                <div class="flex flex-wrap items-center gap-4">
+                    <div class="flex items-center gap-2">
+                        <label class="text-gray-700 font-medium">Time:</label>
+                        <input type="time" id="reminderTime" class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                    
+                    <div class="flex items-center gap-2">
+                        <label class="text-gray-700 font-medium">Message:</label>
+                        <input type="text" id="reminderLabel" placeholder="Meeting, Take medicine, etc." class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent w-48">
+                    </div>
+                    
+                    <button id="setReminderBtn" onclick="setReminder()" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                        Set Reminder
+                    </button>
+                    
+                    <button id="cancelReminderBtn" onclick="cancelReminder()" class="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 transition-colors" style="display: none;">
+                        Cancel All
+                    </button>
+                </div>
+                
+                <!-- Active Reminders List -->
+                <div id="activeReminders" class="mt-6" style="display: none;">
+                    <h4 class="font-semibold text-gray-800 mb-3">Active Reminders:</h4>
+                    <div id="remindersList" class="space-y-2"></div>
+                </div>
+            </div>
+
+            <!-- Activities List -->
+            <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-xl font-semibold text-gray-800">📋 Your Day Schedule</h3>
+                    <button id="clearAll" class="text-red-600 hover:text-red-800 font-medium">Clear All</button>
+                </div>
+                <div id="activitiesList" class="space-y-4">
+                    <div class="text-center text-gray-500 py-8">
+                        <div class="text-4xl mb-2">📅</div>
+                        <p>No activities added yet. Start planning your day!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Health Recommendations -->
+            <div id="healthRecommendations" class="mb-8"></div>
+
+            <!-- Activity Time Summary -->
+            <div id="activityTimeSummary" class="bg-white rounded-xl shadow-lg p-6 mb-8" style="display: none;">
+                <h3 class="text-xl font-semibold text-gray-800 mb-6">📊 Activity Time Summary</h3>
+                <div id="activitySummaryContent" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Authentication state
+        let currentUser = null;
+        
+        // App state
+        let activities = [];
+        let activityId = 0;
+        let reminders = [];
+        let reminderId = 0;
+        let reminderCheckInterval;
+
+        const categoryEmojis = {
+            work: '💼',
+            exercise: '🏃',
+            meals: '🍽️',
+            sleep: '😴',
+            socialmedia: '📱',
+            travel: '🚗',
+            study: '📚',
+            other: '📝'
+        };
+
+        const categoryColors = {
+            work: 'bg-blue-100 text-blue-800',
+            exercise: 'bg-green-100 text-green-800',
+            meals: 'bg-orange-100 text-orange-800',
+            sleep: 'bg-purple-100 text-purple-800',
+            socialmedia: 'bg-pink-100 text-pink-800',
+            travel: 'bg-yellow-100 text-yellow-800',
+            study: 'bg-indigo-100 text-indigo-800',
+            other: 'bg-gray-100 text-gray-800'
+        };
+
+        // Authentication Functions
+        function showWelcomeScreen() {
+            hideAllScreens();
+            document.getElementById('welcomeScreen').style.display = 'block';
+        }
+
+        function showLoginForm() {
+            hideAllScreens();
+            document.getElementById('loginForm').style.display = 'block';
+        }
+
+        function showRegistrationForm() {
+            hideAllScreens();
+            document.getElementById('registrationForm').style.display = 'block';
+        }
+
+        function hideAllScreens() {
+            const screens = ['welcomeScreen', 'loginForm', 'registrationForm', 'successMessage'];
+            screens.forEach(screen => {
+                document.getElementById(screen).style.display = 'none';
+            });
+        }
+
+        function handleLogin(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value.trim();
+            const mobile = document.getElementById('loginMobile').value.trim();
+            
+            if (!email || !mobile) {
+                alert('Please fill in all fields!');
+                return;
+            }
+            
+            // Validate mobile number - must be exactly 10 digits
+            const mobileDigits = mobile.replace(/\D/g, ''); // Remove non-digits
+            if (mobileDigits.length !== 10) {
+                alert('Mobile number must be exactly 10 digits!');
+                return;
+            }
+            
+            // Check if user exists in localStorage
+            const users = JSON.parse(localStorage.getItem('dayTourUsers') || '[]');
+            const user = users.find(u => u.email === email && u.mobile === mobile);
+            
+            if (user) {
+                currentUser = user;
+                localStorage.setItem('dayTourCurrentUser', JSON.stringify(currentUser));
+                enterApp();
+            } else {
+                alert('Account not found! Please check your email and mobile number, or create a new account.');
+            }
+        }
+
+        function handleRegistration(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById('regEmail').value.trim();
+            const mobile = document.getElementById('regMobile').value.trim();
+            const name = document.getElementById('regName').value.trim();
+            const age = parseInt(document.getElementById('regAge').value);
+            
+            if (!email || !mobile || !name || !age || age < 13 || age > 120) {
+                alert('Please fill in all fields correctly! Age must be between 13 and 120.');
+                return;
+            }
+            
+            // Validate mobile number - must be exactly 10 digits
+            const mobileDigits = mobile.replace(/\D/g, ''); // Remove non-digits
+            if (mobileDigits.length !== 10) {
+                alert('Mobile number must be exactly 10 digits!');
+                return;
+            }
+            
+            // Check if user already exists
+            const users = JSON.parse(localStorage.getItem('dayTourUsers') || '[]');
+            const existingUser = users.find(u => u.email === email || u.mobile === mobile);
+            
+            if (existingUser) {
+                alert('An account with this email or mobile number already exists! Please try logging in instead.');
+                return;
+            }
+            
+            // Create new user account
+            const newUser = {
+                id: Date.now(),
+                email: email,
+                mobile: mobile,
+                name: name,
+                age: age,
+                createdAt: new Date().toISOString()
+            };
+            
+            // Save to localStorage
+            users.push(newUser);
+            localStorage.setItem('dayTourUsers', JSON.stringify(users));
+            
+            currentUser = newUser;
+            localStorage.setItem('dayTourCurrentUser', JSON.stringify(currentUser));
+            
+            // Show success message
+            hideAllScreens();
+            document.getElementById('successMessage').style.display = 'block';
+        }
+
+        function enterApp() {
+            document.getElementById('authContainer').style.display = 'none';
+            document.getElementById('mainApp').style.display = 'block';
+            
+            // Update user info in the app
+            document.getElementById('userName').textContent = currentUser.name;
+            document.getElementById('userAge').textContent = currentUser.age;
+            document.getElementById('userEmail').textContent = currentUser.email;
+            
+            // Initialize app
+            initializeApp();
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                currentUser = null;
+                localStorage.removeItem('dayTourCurrentUser');
+                
+                // Reset app state
+                activities = [];
+                reminders = [];
+                
+                // Show auth container
+                document.getElementById('mainApp').style.display = 'none';
+                document.getElementById('authContainer').style.display = 'flex';
+                showWelcomeScreen();
+                
+                // Clear any running intervals
+                if (reminderCheckInterval) {
+                    clearInterval(reminderCheckInterval);
+                    reminderCheckInterval = null;
+                }
+            }
+        }
+
+        function initializeApp() {
+            updateSummary();
+            updateClock();
+            
+            // Update clock every second
+            setInterval(updateClock, 1000);
+            
+            // Load user's activities if any
+            loadUserData();
+        }
+
+        function loadUserData() {
+            // Load user-specific data from localStorage
+            const userDataKey = `dayTourData_${currentUser.id}`;
+            const userData = JSON.parse(localStorage.getItem(userDataKey) || '{}');
+            
+            if (userData.activities) {
+                activities = userData.activities;
+                renderActivities();
+                updateSummary();
+            }
+            
+            if (userData.reminders) {
+                reminders = userData.reminders;
+                renderReminders();
+                if (reminders.length > 0) {
+                    startReminderChecker();
+                }
+            }
+        }
+
+        function saveUserData() {
+            if (currentUser) {
+                const userDataKey = `dayTourData_${currentUser.id}`;
+                const userData = {
+                    activities: activities,
+                    reminders: reminders,
+                    lastUpdated: new Date().toISOString()
+                };
+                localStorage.setItem(userDataKey, JSON.stringify(userData));
+            }
+        }
+
+        // Profile Edit Functions
+        function showEditProfile() {
+            // Populate form with current user data
+            document.getElementById('editName').value = currentUser.name;
+            document.getElementById('editAge').value = currentUser.age;
+            document.getElementById('editEmail').value = currentUser.email;
+            document.getElementById('editMobile').value = currentUser.mobile;
+            
+            document.getElementById('editProfileModal').style.display = 'flex';
+        }
+
+        function hideEditProfile() {
+            document.getElementById('editProfileModal').style.display = 'none';
+        }
+
+        function handleProfileUpdate(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('editName').value.trim();
+            const age = parseInt(document.getElementById('editAge').value);
+            const email = document.getElementById('editEmail').value.trim();
+            const mobile = document.getElementById('editMobile').value.trim();
+            
+            if (!name || !age || !email || !mobile || age < 13 || age > 120) {
+                alert('Please fill in all fields correctly! Age must be between 13 and 120.');
+                return;
+            }
+            
+            // Validate mobile number - must be exactly 10 digits
+            const mobileDigits = mobile.replace(/\D/g, ''); // Remove non-digits
+            if (mobileDigits.length !== 10) {
+                alert('Mobile number must be exactly 10 digits!');
+                return;
+            }
+            
+            // Check if email or mobile already exists for other users
+            const users = JSON.parse(localStorage.getItem('dayTourUsers') || '[]');
+            const existingUser = users.find(u => u.id !== currentUser.id && (u.email === email || u.mobile === mobile));
+            
+            if (existingUser) {
+                alert('An account with this email or mobile number already exists!');
+                return;
+            }
+            
+            // Update current user
+            currentUser.name = name;
+            currentUser.age = age;
+            currentUser.email = email;
+            currentUser.mobile = mobile;
+            currentUser.updatedAt = new Date().toISOString();
+            
+            // Update in users array
+            const userIndex = users.findIndex(u => u.id === currentUser.id);
+            if (userIndex !== -1) {
+                users[userIndex] = currentUser;
+                localStorage.setItem('dayTourUsers', JSON.stringify(users));
+            }
+            
+            // Update current user session
+            localStorage.setItem('dayTourCurrentUser', JSON.stringify(currentUser));
+            
+            // Update UI
+            document.getElementById('userName').textContent = currentUser.name;
+            document.getElementById('userAge').textContent = currentUser.age;
+            document.getElementById('userEmail').textContent = currentUser.email;
+            
+            // Hide modal and show success
+            hideEditProfile();
+            
+            // Show success message
+            const successDiv = document.createElement('div');
+            successDiv.className = 'fixed top-4 right-4 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-50';
+            successDiv.innerHTML = '✓ Profile updated successfully!';
+            document.body.appendChild(successDiv);
+            
+            setTimeout(() => {
+                if (document.body.contains(successDiv)) {
+                    document.body.removeChild(successDiv);
+                }
+            }, 3000);
+        }
+
+        // Check if user is already logged in on page load
+        window.addEventListener('load', function() {
+            const savedUser = localStorage.getItem('dayTourCurrentUser');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                enterApp();
+            }
+        });
+
+        // Save activity function for category-specific inputs
+        function saveActivity(category) {
+            const hoursInput = document.getElementById(category + 'Hours');
+            const minutesInput = document.getElementById(category + 'Minutes');
+            
+            const hours = parseInt(hoursInput.value) || 0;
+            const minutes = parseInt(minutesInput.value) || 0;
+            
+            if (hours === 0 && minutes === 0) {
+                alert('Please enter duration (hours and/or minutes)!');
+                return;
+            }
+            
+            // Calculate total duration in hours
+            const totalDuration = hours + (minutes / 60);
+            
+            // Check current total hours used
+            const currentTotalHours = activities.reduce((sum, activity) => sum + parseFloat(activity.duration), 0);
+            const remainingHours = 24 - currentTotalHours;
+            
+            // Check if this activity would exceed 24 hours
+            if (totalDuration > remainingHours) {
+                const remainingHoursInt = Math.floor(remainingHours);
+                const remainingMinutes = Math.round((remainingHours - remainingHoursInt) * 60);
+                
+                if (remainingHours <= 0) {
+                    alert('⚠️ Your day is already fully scheduled! No more hours available.');
+                } else {
+                    alert(`⚠️ Only ${remainingHoursInt}h ${remainingMinutes}m remaining in your day!\nPlease enter a shorter duration.`);
+                }
+                return;
+            }
+            
+            // Create activity with duration
+            const activity = {
+                id: ++activityId,
+                name: category === 'socialmedia' ? 'Social Media' : category.charAt(0).toUpperCase() + category.slice(1),
+                category: category,
+                duration: totalDuration.toFixed(1),
+                hours: hours,
+                minutes: minutes,
+                loggedAt: new Date().toLocaleString()
+            };
+            
+            activities.push(activity);
+            
+            renderActivities();
+            updateSummary();
+            saveUserData();
+            
+            // Clear inputs and show success
+            hoursInput.value = '';
+            minutesInput.value = '';
+            
+            // Show success feedback
+            const button = event.target;
+            const originalText = button.textContent;
+            button.textContent = '✓ Logged!';
+            button.style.backgroundColor = '#10B981';
+            
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.style.backgroundColor = '';
+            }, 1500);
+        }
+
+        function renderActivities() {
+            const container = document.getElementById('activitiesList');
+            
+            if (activities.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center text-gray-500 py-8">
+                        <div class="text-4xl mb-2">📅</div>
+                        <p>No activities added yet. Start planning your day!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = activities.map(activity => `
+                <div class="activity-card bg-gray-50 rounded-lg p-4 border-l-4 border-blue-500">
+                    <div class="flex justify-between items-start">
+                        <div class="flex-1">
+                            <div class="flex items-center gap-3 mb-2">
+                                <span class="text-2xl">${categoryEmojis[activity.category]}</span>
+                                <h4 class="font-semibold text-gray-800">${activity.name}</h4>
+                                <span class="px-2 py-1 rounded-full text-xs font-medium ${categoryColors[activity.category]}">
+                                    ${activity.category === 'socialmedia' ? 'social media' : activity.category}
+                                </span>
+                            </div>
+                            <div class="flex items-center gap-4 text-sm text-gray-600">
+                                <span>⏱️ Duration: ${activity.hours}h ${activity.minutes}m (${activity.duration} hours)</span>
+                                ${activity.loggedAt ? `<span>📝 Logged: ${activity.loggedAt}</span>` : ''}
+                            </div>
+                        </div>
+                        <button onclick="removeActivity(${activity.id})" class="text-red-500 hover:text-red-700 ml-4">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function removeActivity(id) {
+            activities = activities.filter(activity => activity.id !== id);
+            renderActivities();
+            updateSummary();
+            saveUserData();
+        }
+
+        function updateSummary() {
+            const totalActivities = activities.length;
+            const totalHours = activities.reduce((sum, activity) => sum + parseFloat(activity.duration), 0);
+            const remainingHours = Math.max(0, 24 - totalHours);
+            const progressPercentage = Math.min(100, (totalHours / 24) * 100);
+            
+            document.getElementById('totalActivities').textContent = totalActivities;
+            document.getElementById('totalHours').textContent = totalHours.toFixed(1);
+            document.getElementById('remainingHours').textContent = remainingHours.toFixed(1);
+            document.getElementById('progressBar').style.width = `${progressPercentage}%`;
+            document.getElementById('progressText').textContent = `${progressPercentage.toFixed(1)}% complete`;
+            
+            // Update health recommendations and activity summary
+            updateHealthRecommendations();
+            updateActivityTimeSummary();
+        }
+
+        function updateHealthRecommendations() {
+            // Only show health recommendations if there are activities scheduled
+            if (activities.length === 0) {
+                renderHealthRecommendations([]);
+                return;
+            }
+
+            const exerciseTime = activities.filter(a => a.category === 'exercise').reduce((sum, a) => sum + parseFloat(a.duration), 0);
+            const sleepTime = activities.filter(a => a.category === 'sleep').reduce((sum, a) => sum + parseFloat(a.duration), 0);
+            
+            const recommendations = [];
+            
+            // Exercise recommendation
+            if (exerciseTime === 0) {
+                recommendations.push({
+                    type: 'exercise',
+                    icon: '🏃‍♂️',
+                    title: 'Add Exercise to Your Day!',
+                    message: 'You haven\'t scheduled any exercise yet.',
+                    benefits: [
+                        'Boosts energy and mood throughout the day',
+                        'Strengthens your heart and muscles',
+                        'Improves sleep quality and mental clarity',
+                        'Reduces stress and anxiety levels',
+                        'Helps maintain healthy weight'
+                    ],
+                    suggestion: 'Try to add at least 30 minutes of physical activity to your daily routine.',
+                    color: 'bg-green-50 border-green-200'
+                });
+            }
+            
+            // Sleep recommendation
+            if (sleepTime < 8) {
+                const neededSleep = 8 - sleepTime;
+                recommendations.push({
+                    type: 'sleep',
+                    icon: '😴',
+                    title: 'Prioritize Your Sleep!',
+                    message: sleepTime === 0 ? 'You haven\'t scheduled any sleep yet.' : `You've only scheduled ${sleepTime.toFixed(1)} hours of sleep.`,
+                    benefits: [
+                        'Strengthens immune system and fights illness',
+                        'Improves memory, focus, and decision-making',
+                        'Helps regulate hormones and metabolism',
+                        'Reduces risk of heart disease and diabetes',
+                        'Promotes muscle recovery and growth',
+                        'Enhances mood and emotional well-being'
+                    ],
+                    suggestion: `Consider adding ${neededSleep.toFixed(1)} more hours of sleep. Adults need 7-9 hours for optimal health.`,
+                    color: 'bg-purple-50 border-purple-200'
+                });
+            }
+
+            // Study recommendation
+            const studyTime = activities.filter(a => a.category === 'study').reduce((sum, a) => sum + parseFloat(a.duration), 0);
+            if (studyTime < 2) {
+                const neededStudy = 2 - studyTime;
+                recommendations.push({
+                    type: 'study',
+                    icon: '📚',
+                    title: 'Make Time for Learning!',
+                    message: studyTime === 0 ? 'You haven\'t scheduled any study time yet.' : `You've only scheduled ${studyTime.toFixed(1)} hours of study time.`,
+                    benefits: [
+                        'Continuous learning keeps your mind sharp and active',
+                        'Acquiring new skills opens up career opportunities',
+                        'Reading and studying improves memory and focus',
+                        'Knowledge compounds over time - small daily efforts add up',
+                        'Learning new things boosts confidence and self-esteem',
+                        'Staying curious and educated enriches your life experience'
+                    ],
+                    suggestion: `Consider adding ${neededStudy.toFixed(1)} more hours of study time. Whether it's reading, online courses, or skill development - invest in your growth!`,
+                    color: 'bg-indigo-50 border-indigo-200'
+                });
+            }
+
+            // Social media recommendation
+            const socialmediaTime = activities.filter(a => a.category === 'socialmedia').reduce((sum, a) => sum + parseFloat(a.duration), 0);
+            if (socialmediaTime > 1.5) {
+                const excessTime = socialmediaTime - 1.5;
+                recommendations.push({
+                    type: 'socialmedia',
+                    icon: '📱',
+                    title: 'You\'re Wasting Too Much Time on Social Media!',
+                    message: `You've scheduled ${socialmediaTime.toFixed(1)} hours of social media usage today - that's valuable time you could use for something productive.`,
+                    benefits: [
+                        'You\'re scrolling away precious hours of your day',
+                        'Time spent on social media could be used for learning new skills',
+                        'You could be exercising, reading, or working on personal goals',
+                        'Social media time adds up to days and weeks over a year',
+                        'You\'re missing opportunities to create real value in your life',
+                        'This time could be invested in your future success'
+                    ],
+                    suggestion: `Stop wasting ${excessTime.toFixed(1)} hours! Use that time for something that actually matters - exercise, learning, working on goals, or spending quality time with people you care about.`,
+                    color: 'bg-orange-50 border-orange-200'
+                });
+            }
+            
+            renderHealthRecommendations(recommendations);
+        }
+
+        function updateActivityTimeSummary() {
+            const container = document.getElementById('activityTimeSummary');
+            const contentContainer = document.getElementById('activitySummaryContent');
+            
+            if (activities.length === 0) {
+                container.style.display = 'none';
+                return;
+            }
+            
+            container.style.display = 'block';
+            
+            // Calculate time by category
+            const categoryTimes = {};
+            activities.forEach(activity => {
+                if (!categoryTimes[activity.category]) {
+                    categoryTimes[activity.category] = 0;
+                }
+                categoryTimes[activity.category] += parseFloat(activity.duration);
+            });
+            
+            const totalScheduled = Object.values(categoryTimes).reduce((sum, time) => sum + time, 0);
+            const freeTime = 24 - totalScheduled;
+            
+            // Create summary content
+            let summaryHTML = '';
+            
+            // Show scheduled activities by category
+            Object.entries(categoryTimes).forEach(([category, time]) => {
+                const hours = Math.floor(time);
+                const minutes = Math.round((time - hours) * 60);
+                const percentage = ((time / 24) * 100).toFixed(1);
+                
+                summaryHTML += `
+                    <div class="bg-gray-50 rounded-lg p-4 border-l-4 border-${getCategoryColor(category)}-500">
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="flex items-center gap-2">
+                                <span class="text-xl">${categoryEmojis[category]}</span>
+                                <span class="font-semibold text-gray-800 capitalize">${category === 'socialmedia' ? 'Social Media' : category}</span>
+                            </div>
+                            <span class="text-sm text-gray-600">${percentage}% of day</span>
+                        </div>
+                        <div class="text-2xl font-bold text-gray-800 mb-1">${hours}h ${minutes}m</div>
+                        <div class="text-sm text-gray-600">${time.toFixed(1)} total hours</div>
+                        <div class="w-full bg-gray-200 rounded-full h-2 mt-2">
+                            <div class="bg-${getCategoryColor(category)}-500 h-2 rounded-full transition-all duration-500" style="width: ${percentage}%"></div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            // Show free time if available
+            if (freeTime > 0) {
+                const freeHours = Math.floor(freeTime);
+                const freeMinutes = Math.round((freeTime - freeHours) * 60);
+                const freePercentage = ((freeTime / 24) * 100).toFixed(1);
+                
+                // Generate activity suggestions based on available time
+                const suggestions = getFreeTimeActivitySuggestions(freeTime, categoryTimes);
+                
+                summaryHTML += `
+                    <div class="bg-blue-50 rounded-lg p-4 border-l-4 border-blue-500">
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="flex items-center gap-2">
+                                <span class="text-xl">⏰</span>
+                                <span class="font-semibold text-blue-800">Free Time</span>
+                            </div>
+                            <span class="text-sm text-blue-600">${freePercentage}% of day</span>
+                        </div>
+                        <div class="text-2xl font-bold text-blue-800 mb-1">${freeHours}h ${freeMinutes}m</div>
+                        <div class="text-sm text-blue-600">${freeTime.toFixed(1)} available hours</div>
+                        <div class="w-full bg-gray-200 rounded-full h-2 mt-2">
+                            <div class="bg-blue-500 h-2 rounded-full transition-all duration-500" style="width: ${freePercentage}%"></div>
+                        </div>
+                        
+                        <!-- Activity Suggestions -->
+                        <div class="mt-4 p-3 bg-white rounded-lg border border-blue-200">
+                            <h4 class="font-semibold text-blue-800 mb-2">💡 Suggested Activities:</h4>
+                            <div class="space-y-2">
+                                ${suggestions.map(suggestion => `
+                                    <div class="flex items-center justify-between text-sm">
+                                        <div class="flex items-center gap-2">
+                                            <span>${suggestion.emoji}</span>
+                                            <span class="text-gray-700">${suggestion.activity}</span>
+                                        </div>
+                                        <span class="text-blue-600 font-medium">${suggestion.duration}</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                            <div class="mt-3 text-xs text-gray-600">
+                                💡 Tip: Consider activities that complement your current schedule for a balanced day!
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            contentContainer.innerHTML = summaryHTML;
+        }
+        
+        function getCategoryColor(category) {
+            const colorMap = {
+                work: 'blue',
+                exercise: 'green',
+                meals: 'orange',
+                sleep: 'purple',
+                socialmedia: 'pink',
+                travel: 'yellow',
+                study: 'indigo',
+                other: 'gray'
+            };
+            return colorMap[category] || 'gray';
+        }
+
+        function getFreeTimeActivitySuggestions(freeTime, categoryTimes) {
+            const suggestions = [];
+            
+            // Check what's missing or could be improved
+            const exerciseTime = categoryTimes.exercise || 0;
+            const sleepTime = categoryTimes.sleep || 0;
+            const socialmediaTime = categoryTimes.socialmedia || 0;
+            const mealsTime = categoryTimes.meals || 0;
+            
+            // Priority suggestions based on health and balance
+            if (exerciseTime === 0 && freeTime >= 0.5) {
+                suggestions.push({
+                    emoji: '🏃‍♂️',
+                    activity: 'Add some exercise (walking, stretching, workout)',
+                    duration: '30min - 2h'
+                });
+            }
+            
+            if (sleepTime < 7 && freeTime >= 1) {
+                const neededSleep = Math.min(freeTime, 9 - sleepTime);
+                suggestions.push({
+                    emoji: '😴',
+                    activity: 'Get more sleep for better health',
+                    duration: `${Math.floor(neededSleep)}h ${Math.round((neededSleep % 1) * 60)}m`
+                });
+            }
+            
+            if (mealsTime < 1.5 && freeTime >= 0.5) {
+                suggestions.push({
+                    emoji: '🍽️',
+                    activity: 'Plan proper meal times',
+                    duration: '30min - 1h'
+                });
+            }
+            
+            // General wellness activities
+            if (freeTime >= 0.25) {
+                suggestions.push({
+                    emoji: '🧘‍♀️',
+                    activity: 'Meditation or mindfulness practice',
+                    duration: '15min - 1h'
+                });
+            }
+            
+            if (freeTime >= 0.5) {
+                suggestions.push({
+                    emoji: '📚',
+                    activity: 'Reading or learning something new',
+                    duration: '30min - 2h'
+                });
+            }
+            
+            if (freeTime >= 1) {
+                suggestions.push({
+                    emoji: '👥',
+                    activity: 'Spend time with family or friends',
+                    duration: '1h - 3h'
+                });
+            }
+            
+            if (freeTime >= 0.5) {
+                suggestions.push({
+                    emoji: '🎨',
+                    activity: 'Creative hobby (drawing, music, crafts)',
+                    duration: '30min - 2h'
+                });
+            }
+            
+            // Limit to top 7 suggestions to show more variety
+            return suggestions.slice(0, 7);
+        }
+
+        function renderHealthRecommendations(recommendations) {
+            const container = document.getElementById('healthRecommendations');
+            
+            if (recommendations.length === 0) {
+                container.innerHTML = '';
+                return;
+            }
+            
+            container.innerHTML = recommendations.map(rec => `
+                <div class="bg-white rounded-xl shadow-lg p-6 mb-6 border-2 ${rec.color}">
+                    <div class="flex items-start gap-4">
+                        <div class="text-4xl">${rec.icon}</div>
+                        <div class="flex-1">
+                            <h3 class="text-xl font-bold text-gray-800 mb-2">${rec.title}</h3>
+                            <p class="text-gray-700 mb-4">${rec.message}</p>
+                            
+                            <div class="mb-4">
+                                <h4 class="font-semibold text-gray-800 mb-2">Reality Check:</h4>
+                                <ul class="list-disc list-inside space-y-1 text-gray-600">
+                                    ${rec.benefits.map(benefit => `<li>${benefit}</li>`).join('')}
+                                </ul>
+                            </div>
+                            
+                            <div class="bg-white p-3 rounded-lg border border-gray-200">
+                                <p class="text-sm font-medium text-gray-800">💡 Recommendation: ${rec.suggestion}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Clear all activities
+        document.getElementById('clearAll').addEventListener('click', function() {
+            if (activities.length > 0 && confirm('Are you sure you want to clear all activities?')) {
+                activities = [];
+                renderActivities();
+                updateSummary();
+                saveUserData();
+            }
+        });
+
+        // Clock functionality
+        function updateClock() {
+            const now = new Date();
+            
+            // Format time (HH:MM:SS)
+            const timeString = now.toLocaleTimeString('en-US', {
+                hour12: false,
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+            
+            // Format date
+            const dateString = now.toLocaleDateString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            
+            document.getElementById('currentTime').textContent = timeString;
+            document.getElementById('currentDate').textContent = dateString;
+        }
+
+        // Reminder Functions
+        function setReminder() {
+            const timeInput = document.getElementById('reminderTime');
+            const labelInput = document.getElementById('reminderLabel');
+            
+            if (!timeInput.value) {
+                alert('Please select a time for the reminder!');
+                return;
+            }
+            
+            const reminderTime = timeInput.value;
+            const reminderLabel = labelInput.value || 'Reminder';
+            
+            // Create reminder object
+            const reminder = {
+                id: ++reminderId,
+                time: reminderTime,
+                label: reminderLabel,
+                active: true,
+                createdAt: new Date().toLocaleString()
+            };
+            
+            reminders.push(reminder);
+            renderReminders();
+            saveUserData();
+            
+            // Clear inputs
+            timeInput.value = '';
+            labelInput.value = '';
+            
+            // Show success message
+            const button = document.getElementById('setReminderBtn');
+            const originalText = button.textContent;
+            button.textContent = '✓ Reminder Set!';
+            button.style.backgroundColor = '#10B981';
+            
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.style.backgroundColor = '';
+            }, 1500);
+            
+            // Start checking reminders if not already running
+            if (!reminderCheckInterval) {
+                startReminderChecker();
+            }
+        }
+        
+        function cancelReminder() {
+            if (confirm('Are you sure you want to cancel all reminders?')) {
+                reminders = [];
+                renderReminders();
+                saveUserData();
+                if (reminderCheckInterval) {
+                    clearInterval(reminderCheckInterval);
+                    reminderCheckInterval = null;
+                }
+            }
+        }
+        
+        function removeReminder(id) {
+            reminders = reminders.filter(reminder => reminder.id !== id);
+            renderReminders();
+            saveUserData();
+            
+            if (reminders.length === 0 && reminderCheckInterval) {
+                clearInterval(reminderCheckInterval);
+                reminderCheckInterval = null;
+            }
+        }
+        
+        function renderReminders() {
+            const statusDiv = document.getElementById('reminderStatus');
+            const activeRemindersDiv = document.getElementById('activeReminders');
+            const remindersListDiv = document.getElementById('remindersList');
+            const cancelBtn = document.getElementById('cancelReminderBtn');
+            
+            if (reminders.length === 0) {
+                statusDiv.textContent = 'No reminder set';
+                statusDiv.className = 'text-sm text-gray-500';
+                activeRemindersDiv.style.display = 'none';
+                cancelBtn.style.display = 'none';
+                return;
+            }
+            
+            // Update status
+            const activeReminders = reminders.filter(r => r.active);
+            if (activeReminders.length > 0) {
+                statusDiv.textContent = `${activeReminders.length} reminder${activeReminders.length > 1 ? 's' : ''} active`;
+                statusDiv.className = 'text-sm text-green-600 font-medium';
+                cancelBtn.style.display = 'inline-block';
+            }
+            
+            // Show reminders list
+            activeRemindersDiv.style.display = 'block';
+            remindersListDiv.innerHTML = reminders.map(reminder => `
+                <div class="flex items-center justify-between p-3 bg-blue-50 rounded-lg border border-blue-200">
+                    <div class="flex items-center gap-3">
+                        <span class="text-xl">🔔</span>
+                        <div>
+                            <div class="font-medium text-gray-800">${reminder.label}</div>
+                            <div class="text-sm text-gray-600">
+                                ${formatReminderTime(reminder.time)} • Set: ${reminder.createdAt}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="px-2 py-1 rounded-full text-xs font-medium ${reminder.active ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}">
+                            ${reminder.active ? 'Active' : 'Inactive'}
+                        </span>
+                        <button onclick="removeReminder(${reminder.id})" class="text-red-500 hover:text-red-700">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function formatReminderTime(time) {
+            const [hours, minutes] = time.split(':');
+            const hour12 = hours % 12 || 12;
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            return `${hour12}:${minutes} ${ampm}`;
+        }
+        
+        function startReminderChecker() {
+            reminderCheckInterval = setInterval(() => {
+                const now = new Date();
+                const currentTime = now.toTimeString().slice(0, 5); // HH:MM format
+                
+                reminders.forEach(reminder => {
+                    if (reminder.active && reminder.time === currentTime) {
+                        triggerReminder(reminder);
+                        reminder.active = false; // Deactivate after triggering
+                    }
+                });
+                
+                renderReminders();
+                saveUserData();
+            }, 1000);
+        }
+        
+        function triggerReminder(reminder) {
+            // Create reminder notification
+            const reminderModal = document.createElement('div');
+            reminderModal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+            reminderModal.innerHTML = `
+                <div class="bg-white rounded-xl shadow-2xl p-8 max-w-md mx-4 text-center">
+                    <div class="text-6xl mb-4">🔔</div>
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">REMINDER!</h2>
+                    <p class="text-lg text-gray-700 mb-2">${reminder.label}</p>
+                    <p class="text-gray-600 mb-6">${formatReminderTime(reminder.time)}</p>
+                    <button onclick="dismissReminder()" class="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium">
+                        Got it!
+                    </button>
+                </div>
+            `;
+            
+            document.body.appendChild(reminderModal);
+            
+            // Add dismiss function to global scope
+            window.dismissReminder = function() {
+                document.body.removeChild(reminderModal);
+                delete window.dismissReminder;
+            };
+            
+            // Auto-dismiss after 30 seconds
+            setTimeout(() => {
+                if (document.body.contains(reminderModal)) {
+                    document.body.removeChild(reminderModal);
+                    delete window.dismissReminder;
+                }
+            }, 30000);
+        }
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98cff9c1c0402982',t:'MTc2MDIwMjY3Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
